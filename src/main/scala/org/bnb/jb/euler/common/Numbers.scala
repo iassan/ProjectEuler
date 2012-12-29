@@ -11,8 +11,8 @@ object Numbers {
 
 	type Number = BigInt
 
-	def findDivisors(x: Int): Stream[Int] = {
-		def findRemainingDivisors(x: Int, current: Int): Stream[Int] = {
+	def findDivisors(x: Number): Stream[Number] = {
+		def findRemainingDivisors(x: Number, current: Number): Stream[Number] = {
 			//println("findRemainingDivisors(x: " + x + ", current: " + current + ")")
 			if (current > x) {
 				Stream.empty

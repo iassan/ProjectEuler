@@ -72,7 +72,7 @@ class Problems {
 	}
 
 	def solve0007: Number = {
-		println(primes2.take(1000).toList)
+		//println(primes2.take(1000).toList)
 		//		val d1 = new Date()
 		//		val p1 = primes.take(100).toList
 		//		val d2 = new Date()
@@ -81,8 +81,7 @@ class Problems {
 		//		println("p1: " + (d2.getTime - d1.getTime) + " ms, p2: " + (d3.getTime - d2.getTime) + " ms")
 		//		println(p1)
 		//		println(p2)
-		-1
-//		primes2(10001)
+		primes2(10001)
 	}
 
 	def solve0008(filename: URI): Number = {
@@ -243,27 +242,56 @@ class Problems {
 		res
 	}
 
+	def solve0019: Number = {
+		def days: Stream[(Int, Int, Int, Int)] = {	// dzień, miesiąc, rok, dzień tygodnia (niedziela = 0)
+			val _30dayMonths = Set(4, 6, 9, 11)
+			val _31dayMonths = Set(1, 3, 5, 7, 8, 10, 12)
+			def isLeapYear(year: Int) = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)
+			def daysInMonth(month: Int, year: Int) = {
+				if (_30dayMonths.contains(month)) 30 else {
+					if (_31dayMonths.contains(month)) 31 else {
+						if (isLeapYear(year)) 29 else 28
+					}
+				}
+			}
+			def nextDays(day: (Int, Int, Int, Int)): Stream[(Int, Int, Int, Int)] = {
+				if (day._1 + 1 <= daysInMonth(day._2, day._3)) {
+					val newDay = (day._1 + 1, day._2, day._3, (day._4 + 1) % 7)
+					newDay #:: nextDays(newDay)
+				} else {
+					if (day._2 + 1 <= 12) {
+						val newDay = (1, day._2 + 1, day._3, (day._4 + 1) % 7)
+						newDay #:: nextDays(newDay)
+					} else {
+						val newDay = (1, 1, day._3 + 1, (day._4 + 1) % 7)
+						newDay #:: nextDays(newDay)
+					}
+				}
+			}
+			val first = (1, 1, 1900, 1)
+			first #:: nextDays(first)
+		}
+		days.filter(x => x._1 == 1 && x._4 == 0 && x._3 >= 1901).takeWhile(_._3 <= 2000).size
+	}
+
 	def solve0020: Number = factorial(100).toString().toCharArray.map(_.getNumericValue).sum
 
-	//	def solve0025: Number = {
-	//		fibonacci.filter(_.toString().length <= 1000).take(1).toList
-	//	}
+	def solve0021: Number = {
+		def d(x: Number): Number = findDivisors(x).filter(_ < x).sum
+		val amicables = (BigInt(1) to 10000).map(x => (x, d(x))).toMap
+		amicables.keySet.filter(x => amicables.getOrElse(amicables.getOrElse(x, -1), -1) == x && amicables.getOrElse(x, -1) != x).sum
+	}
+
+	def solve0025: Number = fibonacci.takeWhile(_.toString().length <= 1000).zipWithIndex.filter(_._1.toString().length == 1000)(0)._2 + 1
 
 	def solve0028: Number = {
 		val size = 1001
-		naturals.filter(_ != 0).takeWhile(_ <= size / 2).toList.flatMap(x => List(2 * x, 2 * x, 2 * x, 2 * x)).foldLeft((BigInt(1), BigInt(1)))((s, x) => (s._1 + x, s._2 + s._1 + x))._2
+		naturals.filter(_ != 0).takeWhile(_ <= size / 2).flatMap(x => List(2 * x, 2 * x, 2 * x, 2 * x)).foldLeft((BigInt(1), BigInt(1)))((s, x) => (s._1 + x, s._2 + s._1 + x))._2
 	}
 
-	def solve0030: Number = {
-		val numbers = (10 to 354294).filter(x => sumOf5thPowersOfDigits(x) == x).toList
-		println(numbers)
-		numbers.sum
-	}
+	def solve0030: Number = (10 to 354294).filter(x => sumOf5thPowersOfDigits(x) == x).toList.sum
 
-	def solve0048: Number = {
-		//(1 to 1000).map(x => powerModulo(x, x, BigInt("10000000000"))).sum % BigInt("10000000000")
-		(BigInt(1) to 1000).map(x => x.modPow(x, BigInt("10000000000"))).sum % BigInt("10000000000")
-	}
+	def solve0048: Number = (BigInt(1) to 1000).map(x => x.modPow(x, BigInt("10000000000"))).sum % BigInt("10000000000")
 
 	def solve0067(filename: URI): Number = solve0018(filename)
 

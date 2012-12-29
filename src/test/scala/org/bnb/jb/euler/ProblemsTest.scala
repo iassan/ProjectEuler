@@ -165,6 +165,15 @@ class ProblemsTest extends JUnitSuite {
 
 	@Test
 	@Ignore
+	def testSolve0019() {
+		val problem = new Problems
+		val result = problem.solve0019
+		println("Problem 0019: " + result)
+		assert(result == 171)
+	}
+
+	@Test
+	@Ignore
 	def testSolve0020() {
 		val problem = new Problems
 		val result = problem.solve0020
@@ -172,14 +181,23 @@ class ProblemsTest extends JUnitSuite {
 		assert(result == 648)
 	}
 
-//	@Test
-//	@Ignore
-//	def testSolve0025() {
-//		val problem = new Problems
-//		val result = problem.solve0025
-//		println("Problem 0025: " + result)
-//		assert(result == 1)
-//	}
+	@Test
+	@Ignore
+	def testSolve0021() {
+		val problem = new Problems
+		val result = problem.solve0021
+		println("Problem 0021: " + result)
+		assert(result == 31626)
+	}
+
+	@Test
+	@Ignore
+	def testSolve0025() {
+		val problem = new Problems
+		val result = problem.solve0025
+		println("Problem 0025: " + result)
+		assert(result == 4782)
+	}
 
 	@Test
 	@Ignore
