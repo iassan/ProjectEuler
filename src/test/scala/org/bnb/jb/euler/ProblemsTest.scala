@@ -65,7 +65,7 @@ class ProblemsTest extends JUnitSuite {
 	}
 
 	@Test
-	//@Ignore("doesn't work")
+	@Ignore("doesn't work")
 	def testSolve0007() {
 		val problem = new Problems
 		val result = problem.solve0007
@@ -180,6 +180,33 @@ class ProblemsTest extends JUnitSuite {
 //		println("Problem 0025: " + result)
 //		assert(result == 1)
 //	}
+
+	@Test
+	@Ignore
+	def testSolve0028() {
+		val problem = new Problems
+		val result = problem.solve0028
+		println("Problem 0028: " + result)
+		assert(result == 669171001)
+	}
+
+	@Test
+	@Ignore
+	def testSolve0030() {
+		val problem = new Problems
+		val result = problem.solve0030
+		println("Problem 0030: " + result)
+		assert(result == 443839)
+	}
+
+	@Test
+	@Ignore
+	def testSolve0048() {
+		val problem = new Problems
+		val result = problem.solve0048
+		println("Problem 0048: " + result)
+		assert(result == BigInt("9110846700"))
+	}
 
 	@Test
 	@Ignore

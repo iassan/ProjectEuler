@@ -249,6 +249,22 @@ class Problems {
 	//		fibonacci.filter(_.toString().length <= 1000).take(1).toList
 	//	}
 
+	def solve0028: Number = {
+		val size = 1001
+		naturals.filter(_ != 0).takeWhile(_ <= size / 2).toList.flatMap(x => List(2 * x, 2 * x, 2 * x, 2 * x)).foldLeft((BigInt(1), BigInt(1)))((s, x) => (s._1 + x, s._2 + s._1 + x))._2
+	}
+
+	def solve0030: Number = {
+		val numbers = (10 to 354294).filter(x => sumOf5thPowersOfDigits(x) == x).toList
+		println(numbers)
+		numbers.sum
+	}
+
+	def solve0048: Number = {
+		//(1 to 1000).map(x => powerModulo(x, x, BigInt("10000000000"))).sum % BigInt("10000000000")
+		(BigInt(1) to 1000).map(x => x.modPow(x, BigInt("10000000000"))).sum % BigInt("10000000000")
+	}
+
 	def solve0067(filename: URI): Number = solve0018(filename)
 
 	def solve0107(filename: URI): Number = {

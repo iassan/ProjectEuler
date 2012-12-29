@@ -96,8 +96,9 @@ object Numbers {
 		lazy val stage2 = stage123(init).filter(_._2).map(_._1)
 		//println("stage22: " + stage2.toList)
 		def sieve(s: Stream[Number]): Stream[Number] = {
-			if (s.isEmpty)
+			if (s.isEmpty) {
 				Stream.empty
+			}
 			else {
 				s.head #:: sieve(s.tail.filter(_ % s.head.pow(2) != 0))
 			}
@@ -134,10 +135,10 @@ object Numbers {
 	}
 
 	def triangleNumber(n: Number): Number = {
-//		def triangle(x: Number, acc: Number): Number = {
-//			if (x == 0) acc else triangle(x - 1, acc + x)
-//		}
-//		triangle(n, 0)
+		//		def triangle(x: Number, acc: Number): Number = {
+		//			if (x == 0) acc else triangle(x - 1, acc + x)
+		//		}
+		//		triangle(n, 0)
 		n * (n + 1) / 2
 	}
 
@@ -148,10 +149,12 @@ object Numbers {
 			if (x == 1) {
 				(primes.head, currCount) #:: res
 			} else {
-				if (x % primes.head == 0)
+				if (x % primes.head == 0) {
 					factorize(x / primes.head, primes, currCount + 1, res)
-				else
+				}
+				else {
 					factorize(x, primes.tail, 0, (primes.head, currCount) #:: res)
+				}
 			}
 		}
 		val res = factorize(n, primes, 0, Stream.empty)
@@ -205,6 +208,40 @@ object Numbers {
 		}
 		val hd = if (th.length > 0 && d.length > 0) " and " else ""
 		th + hd + d
+	}
+
+	def powerModulo(base: Number, exponent: Number, modulo: Number): Number = {
+		def powerModulo0(base: Number, exponent: Number, modulo: Number, acc: Number): Number = {
+			if (exponent == 1) {
+				acc
+			} else {
+				powerModulo0(base, exponent - 1, modulo, (acc * base) % modulo)
+			}
+		}
+		if (exponent == 0) {
+			1
+		} else {
+			powerModulo0(base, exponent, modulo, base)
+		}
+	}
+
+	def sumOf5thPowersOfDigits(n: Number): Number = {
+		(1 to 100).map(x => (n / BigInt(10).pow(x - 1)) % 10).map(x => x.pow(5)).sum
+	}
+
+	def power(base: Number, exponent: Number): Number = {
+		def power0(base: Number, exponent: Number, acc: Number): Number = {
+			if (exponent == 1) {
+				acc
+			} else {
+				power0(base, exponent - 1, acc * base)
+			}
+		}
+		if (exponent == 0) {
+			1
+		} else {
+			power0(base, exponent, base)
+		}
 	}
 
 	//	def isPrime(x: Number): Boolean = {
