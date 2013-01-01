@@ -52,6 +52,18 @@ object Numbers {
 		sieve(from(2))
 	}
 
+	def primesWithMax(max: Number): Stream[Number] = {
+		def sieve(s: Stream[Number]): Stream[Number] = {
+			if (s.isEmpty) {
+				Stream.Empty
+			}
+			else {
+				s.head #:: sieve(s.tail filter (_ % s.head != 0))
+			}
+		}
+		sieve((BigInt(2) to max).toStream)
+	}
+
 	lazy val primes2: Stream[Number] = {
 		lazy val init = from(1).map(x => (x, false))
 		//println("init: " + init.toList)
@@ -95,6 +107,58 @@ object Numbers {
 		}
 		lazy val stage2 = stage123(init).filter(_._2).map(_._1)
 		//println("stage22: " + stage2.toList)
+		def sieve(s: Stream[Number]): Stream[Number] = {
+			if (s.isEmpty) {
+				Stream.empty
+			}
+			else {
+				s.head #:: sieve(s.tail.filter(_ % s.head.pow(2) != 0))
+			}
+		}
+		2 #:: 3 #:: 5 #:: sieve(stage2)
+	}
+
+	def primes2WithMax(max: Number): Stream[Number] = {
+		val init = (BigInt(1) to max).map(x => (x, false)).toStream
+		def stage123(x: Stream[(Number, Boolean)]): Stream[(Number, Boolean)] = {
+			val rs1 = List(1, 13, 17, 29, 37, 41, 49, 53)
+			val rs2 = List(7, 19, 31, 43)
+			val rs3 = List(11, 23, 47, 59)
+			lazy val stage1 = x.map(t => (t._1, (if (rs1.contains(t._1 % 60) && solve1(t._1)) !t._2 else t._2)))
+			//println("stage1: " + stage1.toList)
+			lazy val stage2 = stage1.map(t => (t._1, (if (rs2.contains(t._1 % 60) && solve2(t._1)) !t._2 else t._2)))
+			//println("stage2: " + stage2.toList)
+			lazy val stage3 = stage2.map(t => (t._1, (if (rs3.contains(t._1 % 60) && solve3(t._1)) !t._2 else t._2)))
+			stage3
+		}
+		def solve1(n: Number): Boolean = {
+			(for {
+				x <- BigInt(1) to floorSqrt(n / 4)
+				y <- BigInt(1) to floorSqrt(n)
+				if 4 * x * x + y * y == n
+			} yield {
+				1
+			}).length % 2 != 0
+		}
+		def solve2(n: Number): Boolean = {
+			(for {
+				x <- BigInt(1) to floorSqrt(n / 3)
+				y <- BigInt(1) to floorSqrt(n)
+				if 3 * x * x + y * y == n
+			} yield {
+				1
+			}).length % 2 != 0
+		}
+		def solve3(n: Number): Boolean = {
+			(for {
+				x <- BigInt(1) to floorSqrt(n)
+				y <- BigInt(1) until x
+				if 3 * x * x - y * y == n
+			} yield {
+				1
+			}).length % 2 != 0
+		}
+		lazy val stage2 = stage123(init).filter(_._2).map(_._1)
 		def sieve(s: Stream[Number]): Stream[Number] = {
 			if (s.isEmpty) {
 				Stream.empty

@@ -65,7 +65,7 @@ class ProblemsTest extends JUnitSuite {
 	}
 
 	@Test
-	@Ignore("doesn't work")
+	@Ignore
 	def testSolve0007() {
 		val problem = new Problems
 		val result = problem.solve0007
@@ -92,12 +92,12 @@ class ProblemsTest extends JUnitSuite {
 	}
 
 	@Test
-	@Ignore("doesn't work")
+	@Ignore
 	def testSolve0010() {
 		val problem = new Problems
 		val result = problem.solve0010
 		println("Problem 0010: " + result)
-		assert(result == 31875000)
+		assert(result == 142913828922)
 	}
 
 	@Test
@@ -188,6 +188,15 @@ class ProblemsTest extends JUnitSuite {
 		val result = problem.solve0021
 		println("Problem 0021: " + result)
 		assert(result == 31626)
+	}
+
+	@Test
+	@Ignore
+	def testSolve0022() {
+		val problem = new Problems
+		val result = problem.solve0022(getClass.getResource("../../../../0022/names.txt").toURI)
+		println("Problem 0022: " + result)
+		assert(result == 871198282)
 	}
 
 	@Test

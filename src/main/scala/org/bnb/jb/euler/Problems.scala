@@ -72,16 +72,23 @@ class Problems {
 	}
 
 	def solve0007: Number = {
-		//println(primes2.take(1000).toList)
-		//		val d1 = new Date()
-		//		val p1 = primes.take(100).toList
-		//		val d2 = new Date()
-		//		val p2 = primes2.take(100).toList
-		//		val d3 = new Date()
-		//		println("p1: " + (d2.getTime - d1.getTime) + " ms, p2: " + (d3.getTime - d2.getTime) + " ms")
-		//		println(p1)
-		//		println(p2)
-		primes2(10001)
+		val p = new Array[Boolean](110000)
+		for (i <- 0 until p.length) {
+			p(i) = true
+		}
+		p(0) = false
+		p(1) = false
+		for (i <- 2 until p.length) {
+			if (p(i)) {
+				for (j <- 2 * i until p.length by i) {
+					p(j) = false
+				}
+			}
+		}
+		val primes = p.zipWithIndex.filter(_._1)
+		println(primes)
+		println(primes.length)
+		primes(10000)._2	// 10000 bo liczymy od zera
 	}
 
 	def solve0008(filename: URI): Number = {
@@ -111,7 +118,23 @@ class Problems {
 		res(0)
 	}
 
-	def solve0010: Number = primes.takeWhile(_ < 2000000).sum
+	def solve0010: Number = {
+		val p = new Array[Boolean](2000000)
+		for (i <- 0 until p.length) {
+			p(i) = true
+		}
+		p(0) = false
+		p(1) = false
+		for (i <- 2 until p.length) {
+			if (p(i)) {
+				for (j <- 2 * i until p.length by i) {
+					p(j) = false
+				}
+			}
+		}
+		val primes = p.zipWithIndex.filter(_._1)
+		primes.map(x => BigInt(x._2)).sum
+	}
 
 	def solve0011(filename: URI): Number = {
 		val problem = Source.fromFile(filename).getLines().toList.map(_.split(" ").map(BigInt(_)).toList)
@@ -280,6 +303,18 @@ class Problems {
 		def d(x: Number): Number = findDivisors(x).filter(_ < x).sum
 		val amicables = (BigInt(1) to 10000).map(x => (x, d(x))).toMap
 		amicables.keySet.filter(x => amicables.getOrElse(amicables.getOrElse(x, -1), -1) == x && amicables.getOrElse(x, -1) != x).sum
+	}
+
+	def solve0022(filename: URI): Number = {
+		def alphaValue(s: String): Number = {
+			if (s.isEmpty) {
+				0
+			}
+			else {
+				s.head.toInt - 64 + alphaValue(s.tail)
+			}
+		}
+		Source.fromFile(filename).getLines().flatMap(_.replaceAll("\"", "").split(",")).toList.sorted.zipWithIndex.map(x => (x._2 + 1) * alphaValue(x._1)).sum
 	}
 
 	def solve0025: Number = fibonacci.takeWhile(_.toString().length <= 1000).zipWithIndex.filter(_._1.toString().length == 1000)(0)._2 + 1
