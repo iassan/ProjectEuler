@@ -213,30 +213,30 @@ class Problems {
 		BigInt(sum.toString().substring(0, 10))
 	}
 
-//	def solve0014: Number = {
-//		val limit: Number = 1000000
-//		val hardLimit: Number = 5000000
-//		//		def nextStep(currVal: Number, stepNo: Number, maxVal: Number): Number = {
-//		//			println("currVal: " + currVal + ", stepNo: " + stepNo + ", maxVal: " + maxVal)
-//		//			if (currVal > hardLimit)
-//		//				maxVal
-//		//			else {
-//		//				if ((currVal > 1) && (currVal - 1) % 3 == 0 && ((currVal - 1) / 3) % 2 == 1)
-//		//					nextStep((currVal - 1) / 3, stepNo + 1, if (currVal < limit) currVal else maxVal)
-//		//				else
-//		//					nextStep(currVal * 2, stepNo + 1, if (currVal < limit) currVal else maxVal)
-//		//			}
-//		//		}
-//		def nextStep(currVals: Set[Number], nextVals: Set[Number], stepNo: Number, m: Map[Number, Number]): Map[Number, Number] = {
-//			if (currVals.isEmpty)
-//				nextStep(nextVals, Set(), stepNo + 1)
-//			else {
-//				if ((currVals.head-1)%3==0 && ((currVals.head-1)/3)%2==1 && (currVals.head-1)/3>1)
-//
-//			}
-//		}
-//		nextStep(Set(1), Set.empty, 0, Map.empty)
-//	}
+	def solve0014: Number = {
+		def sequenceLength(n: Number): Number = {
+			def sequenceLength0(n: Number, currLength: Number): Number = {
+				if (n == 1) {
+					currLength
+				} else {
+					if (n % 2 == 0) {
+						sequenceLength0(n / 2, currLength + 1)
+					} else {
+						sequenceLength0(3 * n + 1, currLength + 1)
+					}
+				}
+			}
+			sequenceLength0(n, 0)
+		}
+		(1 to 1000000).map(x => (x, sequenceLength(x))).maxBy(_._2)._1
+	}
+
+	def solve0015: Number = {
+		// to jest po prostu liczba permutacji ciagu o długości x + y (szerokość i wysokość siatki), który zawiera dokładnie x elementów o wartości A i y elementów o wartości B
+		lazy val fac20 = factorial(20)
+		lazy val fac40 = factorial(40)
+		fac40 / (fac20 * fac20)
+	}
 
 	def solve0016: Number = (BigInt(1) << (1000)).toString().toCharArray.map(_.getNumericValue).sum
 

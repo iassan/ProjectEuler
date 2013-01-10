@@ -97,7 +97,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0010
 		println("Problem 0010: " + result)
-		assert(result == 142913828922)
+		assert(result == BigInt("142913828922"))
 	}
 
 	@Test
@@ -127,14 +127,23 @@ class ProblemsTest extends JUnitSuite {
 		assert(result == BigInt("5537376230"))
 	}
 
-//	@Test
-//	//@Ignore
-//	def testSolve0014() {
-//		val problem = new Problems
-//		val result = problem.solve0014
-//		println("Problem 0014: " + result)
-//		assert(result == -1)
-//	}
+	@Test
+	@Ignore
+	def testSolve0014() {
+		val problem = new Problems
+		val result = problem.solve0014
+		println("Problem 0014: " + result)
+		assert(result == 837799)
+	}
+
+	@Test
+	@Ignore
+	def testSolve0015() {
+		val problem = new Problems
+		val result = problem.solve0015
+		println("Problem 0015: " + result)
+		assert(result == BigInt("137846528820"))
+	}
 
 	@Test
 	@Ignore
