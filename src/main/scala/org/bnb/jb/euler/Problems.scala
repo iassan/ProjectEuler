@@ -88,7 +88,7 @@ class Problems {
 		val primes = p.zipWithIndex.filter(_._1)
 		println(primes)
 		println(primes.length)
-		primes(10000)._2	// 10000 bo liczymy od zera
+		primes(10000)._2 // 10000 bo liczymy od zera
 	}
 
 	def solve0008(filename: URI): Number = {
@@ -266,13 +266,20 @@ class Problems {
 	}
 
 	def solve0019: Number = {
-		def days: Stream[(Int, Int, Int, Int)] = {	// dzień, miesiąc, rok, dzień tygodnia (niedziela = 0)
+		def days: Stream[(Int, Int, Int, Int)] = {
+			// dzień, miesiąc, rok, dzień tygodnia (niedziela = 0)
 			val _30dayMonths = Set(4, 6, 9, 11)
 			val _31dayMonths = Set(1, 3, 5, 7, 8, 10, 12)
 			def isLeapYear(year: Int) = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)
 			def daysInMonth(month: Int, year: Int) = {
-				if (_30dayMonths.contains(month)) 30 else {
-					if (_31dayMonths.contains(month)) 31 else {
+				if (_30dayMonths.contains(month)) {
+					30
+				}
+				else {
+					if (_31dayMonths.contains(month)) {
+						31
+					}
+					else {
 						if (isLeapYear(year)) 29 else 28
 					}
 				}
@@ -317,6 +324,55 @@ class Problems {
 		Source.fromFile(filename).getLines().flatMap(_.replaceAll("\"", "").split(",")).toList.sorted.zipWithIndex.map(x => (x._2 + 1) * alphaValue(x._1)).sum
 	}
 
+	def solve0023: Number = {
+		val limit = 28123
+		// od 1 do limit/2 dodajemy wielokrotności od 2 w górę aż do limit
+		// mamy sumę podzielników
+		val sumsOfDivisors = new mutable.HashMap[Number, Number]
+		for {
+			i <- BigInt(2) to limit
+			j: Number <- (i * 2) to (limit, i)
+		} yield {
+      sumsOfDivisors.put(j, sumsOfDivisors.getOrElse(j, BigInt(1)) + i)
+		}
+		val abundantNumbers = sumsOfDivisors.filter(x => x._2 > x._1).map(_._1).toSet
+		val numbersThatAreSumsOfTwoAbundantNumbers = (for {
+			i <- abundantNumbers
+			j <- abundantNumbers
+			if j >= i
+			if i + j <= limit
+		} yield {
+			i + j
+		}).toSet
+		val sumOfThoseNumbers = numbersThatAreSumsOfTwoAbundantNumbers.sum
+		(1 to limit).sum - sumOfThoseNumbers
+	}
+
+	def solve0024: Number = {
+		val digits = List(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+		val permutationNumber = 1000000
+		//digits.permutations.toList(permutationNumber - 1).foldLeft(BigInt(0))(10 * _ + _)
+		/*
+		Idea - starting from left to right we count how many permutations we can have on the right hand side if we keep given position and left side untouched.
+		Having that we can set current position and recursively go deeper excluding element at given position
+		*/
+		def howManyPermutations(elements: Number): Number = factorial(elements)
+		def generateNthPermutation(elements: List[Int], permNumber: Number): List[Int] = {
+			if (elements.isEmpty) {
+				Nil
+			} else {
+				if (elements.size == 1) {
+					List(elements.head)
+				} else {
+					val x = howManyPermutations(elements.size - 1)
+					val elementAtCurrentPosition = elements((permNumber / x).toInt)
+					elementAtCurrentPosition :: generateNthPermutation(elements.filter(_ != elementAtCurrentPosition), permNumber % x)
+				}
+			}
+		}
+		generateNthPermutation(digits, permutationNumber - 1).foldLeft(BigInt(0))(10 * _ + _)
+	}
+
 	def solve0025: Number = fibonacci.takeWhile(_.toString().length <= 1000).zipWithIndex.filter(_._1.toString().length == 1000)(0)._2 + 1
 
 	def solve0028: Number = {
@@ -345,10 +401,10 @@ class Problems {
 		val subGraphs = (0 until s.length).map(x => (x, x)).toMap[Int, Int] // identyfikator grupy -> lista wierzchołków w grupie
 		def findMinimalSpanningTree(vertices: List[(Int, Int, Number)], subGraphs: immutable.Map[Int, Int]): List[(Int, Int, Number)] = {
 			def findMinimalSpanningTree0(vertices: List[(Int, Int, Number)], subGraphs: immutable.Map[Int, Int], curr: List[(Int, Int, Number)]): List[(Int, Int, Number)] = {
-//				println("Iteartion")
-//				println("subGraphs: " + subGraphs)
-//				println("vertices.head: " + vertices.head + ", v1: " + subGraphs(vertices.head._1) + ", v2: " + subGraphs(vertices.head._2) + ", diff: " + (subGraphs(vertices.head._2) - subGraphs(vertices.head._1)))
-//				println("curr.length: " + curr.length)
+				//				println("Iteartion")
+				//				println("subGraphs: " + subGraphs)
+				//				println("vertices.head: " + vertices.head + ", v1: " + subGraphs(vertices.head._1) + ", v2: " + subGraphs(vertices.head._2) + ", diff: " + (subGraphs(vertices.head._2) - subGraphs(vertices.head._1)))
+				//				println("curr.length: " + curr.length)
 				if (subGraphs.values.toSet.size == 1) {
 					curr
 				}
@@ -356,10 +412,10 @@ class Problems {
 					if (vertices.isEmpty) throw new IllegalStateException("Vertices are empty, yet the algorithm didn't finish...")
 					if (subGraphs(vertices.head._1) != subGraphs(vertices.head._2)) {
 						//subGraphs.updated(vertices.head._1, subGraphs(vertices.head._1) ++ subGraphs(vertices.head._2)).filter(t => t._1 != vertices.head._2)
-//						println("new vertice")
+						//						println("new vertice")
 						findMinimalSpanningTree0(vertices.tail, subGraphs.keys.map(x => (x, if (subGraphs(x) == subGraphs(vertices.head._2)) subGraphs(vertices.head._1) else subGraphs(x))).toMap, vertices.head :: curr)
 					} else {
-//						println("not interested")
+						//						println("not interested")
 						findMinimalSpanningTree0(vertices.tail, subGraphs, curr)
 					}
 				}

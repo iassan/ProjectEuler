@@ -9,7 +9,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<scala.version>2.9.2</scala.version>
+		<scala.version>2.10.1</scala.version>
+		<scalatest.scala.version>2.10</scalatest.scala.version>
+		<scalatest.version>1.9.1</scalatest.version>
 	</properties>
 
 	<build>
@@ -55,8 +57,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scalatest</groupId>
-			<artifactId>scalatest_${scala.version}</artifactId>
-			<version>1.8</version>
+			<artifactId>scalatest_${scalatest.scala.version}</artifactId>
+			<version>${scalatest.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<!--dependency>

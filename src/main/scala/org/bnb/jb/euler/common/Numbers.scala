@@ -193,6 +193,7 @@ object Numbers {
 
 	def factorial(n: Number): Number = {
 		def f(n: Number, acc: Number): Number = {
+			if (n < 1) throw new IllegalArgumentException("Cannot calculate factorial for something less than 1")
 			if (n == 1) acc else f(n - 1, acc * n)
 		}
 		f(n, 1)
@@ -307,8 +308,4 @@ object Numbers {
 			power0(base, exponent, base)
 		}
 	}
-
-	//	def isPrime(x: Number): Boolean = {
-	//
-	//	}
 }

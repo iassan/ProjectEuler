@@ -210,6 +210,24 @@ class ProblemsTest extends JUnitSuite {
 
 	@Test
 	@Ignore
+	def testSolve0023() {
+		val problem = new Problems
+		val result = problem.solve0023
+		println("Problem 0023: " + result)
+		assert(result == 4179871)
+	}
+
+	@Test
+	@Ignore
+	def testSolve0024() {
+		val problem = new Problems
+		val result = problem.solve0024
+		println("Problem 0024: " + result)
+		assert(result == BigInt("2783915460"))
+	}
+
+	@Test
+	@Ignore
 	def testSolve0025() {
 		val problem = new Problems
 		val result = problem.solve0025
