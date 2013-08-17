@@ -1,6 +1,7 @@
 package org.bnb.jb.euler.common
 
 import math._
+import scala.collection.immutable.HashMap
 
 /**
  * @author Jacek Bilski
@@ -16,12 +17,10 @@ object Numbers {
 			//println("findRemainingDivisors(x: " + x + ", current: " + current + ")")
 			if (current > x) {
 				Stream.empty
-			}
-			else {
+			} else {
 				if ((x % current) == 0) {
 					current #:: findRemainingDivisors(x, current + 1)
-				}
-				else {
+				} else {
 					findRemainingDivisors(x, current + 1)
 				}
 			}
@@ -43,8 +42,6 @@ object Numbers {
 
 	private def from(x: Number): Stream[Number] = x #:: from(x + 1)
 
-	private def from(x: Number, s: Number): Stream[Number] = x #:: from(x + s)
-
 	def naturals: Stream[Number] = from(0)
 
 	lazy val primes: Stream[Number] = {
@@ -56,8 +53,7 @@ object Numbers {
 		def sieve(s: Stream[Number]): Stream[Number] = {
 			if (s.isEmpty) {
 				Stream.Empty
-			}
-			else {
+			} else {
 				s.head #:: sieve(s.tail filter (_ % s.head != 0))
 			}
 		}
@@ -110,8 +106,7 @@ object Numbers {
 		def sieve(s: Stream[Number]): Stream[Number] = {
 			if (s.isEmpty) {
 				Stream.empty
-			}
-			else {
+			} else {
 				s.head #:: sieve(s.tail.filter(_ % s.head.pow(2) != 0))
 			}
 		}
@@ -162,8 +157,7 @@ object Numbers {
 		def sieve(s: Stream[Number]): Stream[Number] = {
 			if (s.isEmpty) {
 				Stream.empty
-			}
-			else {
+			} else {
 				s.head #:: sieve(s.tail.filter(_ % s.head.pow(2) != 0))
 			}
 		}
@@ -176,8 +170,7 @@ object Numbers {
 		def timesIn(n: Number, x: Number, acc: Number): Number = {
 			if (n % x == 0) {
 				timesIn(n / x, x, acc + 1)
-			}
-			else {
+			} else {
 				acc
 			}
 		}
@@ -216,15 +209,24 @@ object Numbers {
 			} else {
 				if (x % primes.head == 0) {
 					factorize(x / primes.head, primes, currCount + 1, res)
-				}
-				else {
+				} else {
 					factorize(x, primes.tail, 0, (primes.head, currCount) #:: res)
 				}
 			}
 		}
 		val res = factorize(n, primes, 0, Stream.empty)
-		//println("factorize(n: " + n + "): " + res.toList)
 		res
+	}
+
+	def sumFactors(x: Stream[(Number, Int)], y: Stream[(Number, Int)]): Stream[(Number, Int)] = {
+		def add(x: Stream[(Number, Int)], res: Map[Number, Int]): Map[Number, Int] = {
+			if (x.isEmpty) {
+				res
+			} else {
+				add(x.tail, res.updated(x.head._1, res.getOrElse(x.head._1, 0) + x.head._2))
+			}
+		}
+		add(x, add(y, new HashMap[Number, Int])).toStream
 	}
 
 	def textualRepresentation(n: Number): String = {
