@@ -5,6 +5,7 @@ import scala.io.Source
 import java.net.URI
 import java.util.Date
 import collection.{immutable, mutable}
+import scala.collection.immutable.{HashMap, HashSet}
 
 /**
  * @author Jacek Bilski
@@ -203,7 +204,7 @@ class Problems {
 			}
 			factorize(n, primes, 1, 1)
 		}
-		val res = ((1 to 15000).toStream.map(x => (x, countDivisorsOfTriangleOf(x))).filter(_._2 >= 500))(0)
+		val res = (1 to 15000).toStream.map(x => (x, countDivisorsOfTriangleOf(x))).filter(_._2 >= 500)(0)
 		triangleNumber(res._1)
 	}
 
@@ -331,9 +332,9 @@ class Problems {
 		val sumsOfDivisors = new mutable.HashMap[Number, Number]
 		for {
 			i <- BigInt(2) to limit
-			j: Number <- (i * 2) to (limit, i)
+			j: Number <- (i * 2) to(limit, i)
 		} yield {
-      sumsOfDivisors.put(j, sumsOfDivisors.getOrElse(j, BigInt(1)) + i)
+			sumsOfDivisors.put(j, sumsOfDivisors.getOrElse(j, BigInt(1)) + i)
 		}
 		val abundantNumbers = sumsOfDivisors.filter(x => x._2 > x._1).map(_._1).toSet
 		val numbersThatAreSumsOfTwoAbundantNumbers = (for {
@@ -378,6 +379,85 @@ class Problems {
 	def solve0028: Number = {
 		val size = 1001
 		naturals.filter(_ != 0).takeWhile(_ <= size / 2).flatMap(x => List(2 * x, 2 * x, 2 * x, 2 * x)).foldLeft((BigInt(1), BigInt(1)))((s, x) => (s._1 + x, s._2 + s._1 + x))._2
+	}
+
+	def solve0029: Number = {
+		val limit = 100
+		/*
+		 Idea: We don't need to calculate those powers. x^y = a^b <=> x=a^w & y=b/w.
+		 So for each pair (a,b) we try to look for another pair, that would give the same value and mark it as "reached".
+		 And for the same pair, if it wasn't "reached" we add one to counter. In the end the counter is the solution.
+		  */
+		def s(a: Number, b: Number, counter: Number, reached: Map[Number, Set[Number]]): Number = {
+			def findAllCombinations(a: Number, b: Number): Set[(Number, Number)] = {
+				val aFactors = factorize(a)
+				val bFactors = factorize(b)
+				val combinedFactors = sumFactors(aFactors, bFactors)
+				val simpleFactors = combinedFactors.map(x => List().padTo(x._2, x._1)).toList.flatten
+				val len = simpleFactors.length
+				val permutations = simpleFactors.permutations
+				(for {
+					p <- permutations
+					l <- 1 to len
+					(p1, p2) = p.splitAt(l)
+				} yield {
+					(p1.foldRight(BigInt(1))(_*_), p2.foldRight(BigInt(1))(_*_))
+				}).toSet
+			}
+			def markOtherReached(cs: Set[(Number, Number)], reached: Map[Number, Set[Number]]): Map[Number, Set[Number]] = {
+				if (cs.isEmpty) {
+					reached
+				} else {
+					markOtherReached(cs.tail, reached.updated(cs.head._1, reached.getOrElse(cs.head._1, new HashSet[Number]) + cs.head._2))
+				}
+			}
+//			def markOtherReached(a: Number, b: Number, ws: Stream[Number], reached: Map[Number, Set[Number]]): Map[Number, Set[Number]] = {
+//				if (ws.isEmpty) {
+//					reached
+//				} else {
+//					//println(ws.toList)
+//					val w = ws.head
+//					val x = a.pow(w.intValue())
+//					val y = b / w
+//					if (x > limit) {
+//						markOtherReached(a, b, ws.tail, reached)
+//					} else {
+//						//println("For " + a + "^" + b + " adding new reached: " + x + "^" + y)
+//						markOtherReached(a, b, ws.tail, reached.updated(x, reached.getOrElse(x, new HashSet[Number]) + y))
+//					}
+//				}
+//			}
+			if (a > limit) {
+				counter
+			} else {
+				if (b > limit) {
+					s(a + 1, 2, counter, reached)
+				} else {
+					val beenHere = reached.getOrElse(a, new HashSet[Number]).contains(b)
+					val counterInc = if (beenHere) 0 else 1
+					val cs = findAllCombinations(a, b)
+					//println("b: " + ws.toList)
+					val newReached = markOtherReached(cs, reached)
+					s(a, b + 1, counter + counterInc, newReached)
+				}
+			}
+		}
+		s(2, 2, 0, new immutable.HashMap[Number, Set[Number]])
+	}
+
+	def solve0029a: Number = {
+		def f(m: Map[BigInt, Set[(Int, Int)]], v: (Int, Int, BigInt)): Map[BigInt, Set[(Int, Int)]] = {
+			m.updated(v._3, m.getOrElse(v._3, new HashSet[(Int, Int)]) + ((v._1, v._2)))
+		}
+		val res = for {
+			a <- 2 to 100
+			b <- 2 to 100
+		} yield {
+			(a, b, BigInt(a).pow(b))
+		}
+		val packed = res.foldLeft[Map[BigInt, Set[(Int, Int)]]](new HashMap[BigInt, Set[(Int, Int)]])(f)
+		println(packed.filter(_._2.size > 1).toList.sortBy(_._1))
+		res.size
 	}
 
 	def solve0030: Number = (10 to 354294).filter(x => sumOf5thPowersOfDigits(x) == x).toList.sum
