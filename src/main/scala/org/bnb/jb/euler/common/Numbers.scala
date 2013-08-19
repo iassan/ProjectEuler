@@ -296,18 +296,5 @@ object Numbers {
 		(1 to 100).map(x => (n / BigInt(10).pow(x - 1)) % 10).map(x => x.pow(5)).sum
 	}
 
-	def power(base: Number, exponent: Number): Number = {
-		def power0(base: Number, exponent: Number, acc: Number): Number = {
-			if (exponent == 1) {
-				acc
-			} else {
-				power0(base, exponent - 1, acc * base)
-			}
-		}
-		if (exponent == 0) {
-			1
-		} else {
-			power0(base, exponent, base)
-		}
-	}
+	def multiGcd(numbers: Stream[Number]): Number = numbers.foldRight(numbers(0))((x, b) => x.gcd(b))
 }

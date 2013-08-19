@@ -390,18 +390,25 @@ class Problems {
 		  */
 		def s(a: Number, b: Number, counter: Number, reached: Map[Number, Set[Number]]): Number = {
 			def findAllCombinations(a: Number, b: Number): Set[(Number, Number)] = {
+				// make (64,80) <-> (32,96), (81,75) <-> (27,100), (2,4) <-> (4,2), (10,10) <-> (100,5), etc.
+				// So, for example if I have (2^5)^96, then (2^6)^(96*(5/6)).
+				// In general (w^x)^b = (w^y)^(b*(x/y)) if b*(x/y) is integer
+				def findWandX(aFactors: Stream[(Number, Int)]): (Number, Number) = {
+					if (aFactors.size == 1)
+						(aFactors(0)._1, BigInt(aFactors(0)._2))
+					else {
+						val gcd = multiGcd(aFactors.map(x => BigInt(x._2)))
+						(aFactors.map(x => x._1.pow((x._2/gcd).intValue())).foldRight(BigInt(1))(_*_), gcd)
+					}
+				}
 				val aFactors = factorize(a)
-				val bFactors = factorize(b)
-				val combinedFactors = sumFactors(aFactors, bFactors)
-				val simpleFactors = combinedFactors.map(x => List().padTo(x._2, x._1)).toList.flatten
-				val len = simpleFactors.length
-				val permutations = simpleFactors.permutations
+				val (w, x) = findWandX(aFactors)
 				(for {
-					p <- permutations
-					l <- 1 to len
-					(p1, p2) = p.splitAt(l)
+					y <- x to 100
+					if w.pow(y.intValue()) <= limit
+					if (b * x % y) == 0
 				} yield {
-					(p1.foldRight(BigInt(1))(_*_), p2.foldRight(BigInt(1))(_*_))
+					(w.pow(y.intValue()), b * x / y)
 				}).toSet
 			}
 			def markOtherReached(cs: Set[(Number, Number)], reached: Map[Number, Set[Number]]): Map[Number, Set[Number]] = {
@@ -411,22 +418,6 @@ class Problems {
 					markOtherReached(cs.tail, reached.updated(cs.head._1, reached.getOrElse(cs.head._1, new HashSet[Number]) + cs.head._2))
 				}
 			}
-//			def markOtherReached(a: Number, b: Number, ws: Stream[Number], reached: Map[Number, Set[Number]]): Map[Number, Set[Number]] = {
-//				if (ws.isEmpty) {
-//					reached
-//				} else {
-//					//println(ws.toList)
-//					val w = ws.head
-//					val x = a.pow(w.intValue())
-//					val y = b / w
-//					if (x > limit) {
-//						markOtherReached(a, b, ws.tail, reached)
-//					} else {
-//						//println("For " + a + "^" + b + " adding new reached: " + x + "^" + y)
-//						markOtherReached(a, b, ws.tail, reached.updated(x, reached.getOrElse(x, new HashSet[Number]) + y))
-//					}
-//				}
-//			}
 			if (a > limit) {
 				counter
 			} else {
@@ -436,7 +427,6 @@ class Problems {
 					val beenHere = reached.getOrElse(a, new HashSet[Number]).contains(b)
 					val counterInc = if (beenHere) 0 else 1
 					val cs = findAllCombinations(a, b)
-					//println("b: " + ws.toList)
 					val newReached = markOtherReached(cs, reached)
 					s(a, b + 1, counter + counterInc, newReached)
 				}
