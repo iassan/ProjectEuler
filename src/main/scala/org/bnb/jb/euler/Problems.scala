@@ -4,7 +4,6 @@ import org.bnb.jb.euler.common.Numbers._
 import scala.io.Source
 import java.net.URI
 import java.util.Date
-import collection.{immutable, mutable}
 import scala.collection.immutable.{HashMap, HashSet}
 
 /**
@@ -326,14 +325,21 @@ class Problems {
 		val limit = 28123
 		// od 1 do limit/2 dodajemy wielokrotności od 2 w górę aż do limit
 		// mamy sumę podzielników
-		val sumsOfDivisors = new mutable.HashMap[Number, Number]
-		for {
-			i <- BigInt(2) to limit
-			j: Number <- (i * 2) to(limit, i)
-		} yield {
-			sumsOfDivisors.put(j, sumsOfDivisors.getOrElse(j, BigInt(1)) + i)
+		def findSumsOfDivisors: Map[Number, Number] = {
+			def findSumsOfDivisors(x: Number, y: Number, sumsOfDivisors: Map[Number, Number]): Map[Number, Number] = {
+				if (x > limit)
+					sumsOfDivisors
+				else {
+					if (y > limit) {
+						findSumsOfDivisors(x + 1, 2 * (x + 1), sumsOfDivisors)
+					} else {
+						findSumsOfDivisors(x, y + x, sumsOfDivisors.updated(y, sumsOfDivisors.getOrElse(y, BigInt(1)) + x))
+					}
+				}
+			}
+			findSumsOfDivisors(2, 4, new HashMap[Number, Number])
 		}
-		val abundantNumbers = sumsOfDivisors.filter(x => x._2 > x._1).map(_._1).toSet
+		val abundantNumbers = findSumsOfDivisors.filter(x => x._2 > x._1).map(_._1).toSet
 		val numbersThatAreSumsOfTwoAbundantNumbers = (for {
 			i <- abundantNumbers
 			j <- abundantNumbers
@@ -429,7 +435,7 @@ class Problems {
 				}
 			}
 		}
-		s(2, 2, 0, new immutable.HashMap[Number, Set[Number]])
+		s(2, 2, 0, new HashMap[Number, Set[Number]])
 	}
 
 	def solve0030: Number = (10 to 354294).filter(x => sumOf5thPowersOfDigits(x) == x).toList.sum
@@ -451,8 +457,8 @@ class Problems {
 		val start = new Date()
 		val sum = vertices.map(_._3).sum
 		val subGraphs = (0 until s.length).map(x => (x, x)).toMap[Int, Int] // identyfikator grupy -> lista wierzchołków w grupie
-		def findMinimalSpanningTree(vertices: List[(Int, Int, Number)], subGraphs: immutable.Map[Int, Int]): List[(Int, Int, Number)] = {
-			def findMinimalSpanningTree0(vertices: List[(Int, Int, Number)], subGraphs: immutable.Map[Int, Int], curr: List[(Int, Int, Number)]): List[(Int, Int, Number)] = {
+		def findMinimalSpanningTree(vertices: List[(Int, Int, Number)], subGraphs: Map[Int, Int]): List[(Int, Int, Number)] = {
+			def findMinimalSpanningTree0(vertices: List[(Int, Int, Number)], subGraphs: Map[Int, Int], curr: List[(Int, Int, Number)]): List[(Int, Int, Number)] = {
 				//				println("Iteartion")
 				//				println("subGraphs: " + subGraphs)
 				//				println("vertices.head: " + vertices.head + ", v1: " + subGraphs(vertices.head._1) + ", v2: " + subGraphs(vertices.head._2) + ", diff: " + (subGraphs(vertices.head._2) - subGraphs(vertices.head._1)))

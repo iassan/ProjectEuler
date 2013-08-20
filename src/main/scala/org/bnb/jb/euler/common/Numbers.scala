@@ -67,11 +67,11 @@ object Numbers {
 			val rs1 = List(1, 13, 17, 29, 37, 41, 49, 53)
 			val rs2 = List(7, 19, 31, 43)
 			val rs3 = List(11, 23, 47, 59)
-			lazy val stage1 = x.map(t => (t._1, (if (rs1.contains(t._1 % 60) && solve1(t._1)) !t._2 else t._2)))
+			lazy val stage1 = x.map(t => (t._1, if (rs1.contains(t._1 % 60) && solve1(t._1)) !t._2 else t._2))
 			//println("stage1: " + stage1.toList)
-			lazy val stage2 = stage1.map(t => (t._1, (if (rs2.contains(t._1 % 60) && solve2(t._1)) !t._2 else t._2)))
+			lazy val stage2 = stage1.map(t => (t._1, if (rs2.contains(t._1 % 60) && solve2(t._1)) !t._2 else t._2))
 			//println("stage2: " + stage2.toList)
-			lazy val stage3 = stage2.map(t => (t._1, (if (rs3.contains(t._1 % 60) && solve3(t._1)) !t._2 else t._2)))
+			lazy val stage3 = stage2.map(t => (t._1, if (rs3.contains(t._1 % 60) && solve3(t._1)) !t._2 else t._2))
 			stage3
 		}
 		def solve1(n: Number): Boolean = {
