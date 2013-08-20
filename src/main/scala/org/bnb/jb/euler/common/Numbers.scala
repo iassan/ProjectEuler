@@ -119,11 +119,11 @@ object Numbers {
 			val rs1 = List(1, 13, 17, 29, 37, 41, 49, 53)
 			val rs2 = List(7, 19, 31, 43)
 			val rs3 = List(11, 23, 47, 59)
-			lazy val stage1 = x.map(t => (t._1, (if (rs1.contains(t._1 % 60) && solve1(t._1)) !t._2 else t._2)))
+			lazy val stage1 = x.map(t => (t._1, if (rs1.contains(t._1 % 60) && solve1(t._1)) !t._2 else t._2))
 			//println("stage1: " + stage1.toList)
-			lazy val stage2 = stage1.map(t => (t._1, (if (rs2.contains(t._1 % 60) && solve2(t._1)) !t._2 else t._2)))
+			lazy val stage2 = stage1.map(t => (t._1, if (rs2.contains(t._1 % 60) && solve2(t._1)) !t._2 else t._2))
 			//println("stage2: " + stage2.toList)
-			lazy val stage3 = stage2.map(t => (t._1, (if (rs3.contains(t._1 % 60) && solve3(t._1)) !t._2 else t._2)))
+			lazy val stage3 = stage2.map(t => (t._1, if (rs3.contains(t._1 % 60) && solve3(t._1)) !t._2 else t._2))
 			stage3
 		}
 		def solve1(n: Number): Boolean = {
@@ -180,24 +180,12 @@ object Numbers {
 		timesIn(n, x, 0)
 	}
 
-	def greatestCommonDivisor(a: Number, b: Number): Number = {
-		if (b == 0) a else greatestCommonDivisor(b, a % b)
-	}
-
 	def factorial(n: Number): Number = {
 		def f(n: Number, acc: Number): Number = {
 			if (n < 1) throw new IllegalArgumentException("Cannot calculate factorial for something less than 1")
 			if (n == 1) acc else f(n - 1, acc * n)
 		}
 		f(n, 1)
-	}
-
-	def triangleNumber(n: Number): Number = {
-		//		def triangle(x: Number, acc: Number): Number = {
-		//			if (x == 0) acc else triangle(x - 1, acc + x)
-		//		}
-		//		triangle(n, 0)
-		n * (n + 1) / 2
 	}
 
 	// returns Stream of pairs (a, b), where a is a prime factor and b is count of that prime factor
@@ -214,8 +202,7 @@ object Numbers {
 				}
 			}
 		}
-		val res = factorize(n, primes, 0, Stream.empty)
-		res
+		factorize(n, primes, 0, Stream.empty)
 	}
 
 	def sumFactors(x: Stream[(Number, Int)], y: Stream[(Number, Int)]): Stream[(Number, Int)] = {

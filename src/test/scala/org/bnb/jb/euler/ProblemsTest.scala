@@ -245,7 +245,7 @@ class ProblemsTest extends JUnitSuite {
 	}
 
 	@Test
-	//@Ignore
+	@Ignore
 	def testSolve0029() {
 		val problem = new Problems
 		val result = problem.solve0029

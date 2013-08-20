@@ -179,33 +179,30 @@ class Problems {
 	}
 
 	def solve0012: Number = {
-		val cod = new mutable.HashMap[Number, Number]
+		val requiredCount = 500
 		// rozłożyć na czynniki pierwsze i policzyć liczbę kombinacji tychże
-		def countDivisorsOfTriangleOf(n: Number): Number = {
+		def countDivisorsOfTriangleOf(n: Number, cod: Map[Number, Number]): Number = {
+			def countDivisorsOf(n: Number): Number = factorize(n).foldLeft(BigInt(1))((b, x) => b * (x._2 + 1))
 			if (n % 2 == 0) {
-				cod.getOrElseUpdate(n / 2, countDivisorsOf(n / 2)) * cod.getOrElseUpdate(n + 1, countDivisorsOf(n + 1))
-			} else {
-				cod.getOrElseUpdate(n, countDivisorsOf(n)) * cod.getOrElseUpdate((n + 1) / 2, countDivisorsOf((n + 1) / 2))
-			}
-		}
-		def countDivisorsOf(n: Number): Number = {
-			def factorize(x: Number, primes: Stream[Number], currCount: Int, res: Number): Number = {
-				//println("factorize(x: " + x + ", primes.head: " + primes.head + ", currCount: " + currCount + ")")
-				if (x == 1) {
-					currCount * res
+				val cod1 = if (cod.contains(n / 2)) cod else cod.updated(n / 2, countDivisorsOf(n / 2))
+				val cod2 = if (cod1.contains(n + 1)) cod1 else cod1.updated(n + 1, countDivisorsOf(n + 1))
+				if (cod2.getOrElse(n / 2, BigInt(1)) * cod2.getOrElse(n + 1, BigInt(1)) > requiredCount) {
+					n
 				} else {
-					if (x % primes.head == 0) {
-						factorize(x / primes.head, primes, currCount + 1, res)
-					}
-					else {
-						factorize(x, primes.tail, 1, currCount * res)
-					}
+					countDivisorsOfTriangleOf(n + 1, cod2)
+				}
+			} else {
+				val cod1 = if (cod.contains(n)) cod else cod.updated(n, countDivisorsOf(n))
+				val cod2 = if (cod1.contains((n + 1) / 2)) cod1 else cod1.updated((n + 1) / 2, countDivisorsOf((n + 1) / 2))
+				if (cod2.getOrElse(n, BigInt(1)) * cod2.getOrElse((n + 1) / 2, BigInt(1)) > requiredCount) {
+					n
+				} else {
+					countDivisorsOfTriangleOf(n + 1, cod2)
 				}
 			}
-			factorize(n, primes, 1, 1)
 		}
-		val res = (1 to 15000).toStream.map(x => (x, countDivisorsOfTriangleOf(x))).filter(_._2 >= 500)(0)
-		triangleNumber(res._1)
+		val res = countDivisorsOfTriangleOf(1, new HashMap[Number, Number])
+		res * (res + 1) / 2
 	}
 
 	def solve0013(filename: URI): Number = {
@@ -239,7 +236,7 @@ class Problems {
 		fac40 / (fac20 * fac20)
 	}
 
-	def solve0016: Number = (BigInt(1) << (1000)).toString().toCharArray.map(_.getNumericValue).sum
+	def solve0016: Number = (BigInt(1) << 1000).toString().toCharArray.map(_.getNumericValue).sum
 
 	def solve0017: Number = (1 to 1000).map(textualRepresentation(_).replaceAll(" ", "").replaceAll("-", "").length).sum
 
@@ -404,7 +401,7 @@ class Problems {
 				val aFactors = factorize(a)
 				val (w, x) = findWandX(aFactors)
 				(for {
-					y <- x to 100
+					y <- x to limit
 					if w.pow(y.intValue()) <= limit
 					if (b * x % y) == 0
 				} yield {
@@ -433,21 +430,6 @@ class Problems {
 			}
 		}
 		s(2, 2, 0, new immutable.HashMap[Number, Set[Number]])
-	}
-
-	def solve0029a: Number = {
-		def f(m: Map[BigInt, Set[(Int, Int)]], v: (Int, Int, BigInt)): Map[BigInt, Set[(Int, Int)]] = {
-			m.updated(v._3, m.getOrElse(v._3, new HashSet[(Int, Int)]) + ((v._1, v._2)))
-		}
-		val res = for {
-			a <- 2 to 100
-			b <- 2 to 100
-		} yield {
-			(a, b, BigInt(a).pow(b))
-		}
-		val packed = res.foldLeft[Map[BigInt, Set[(Int, Int)]]](new HashMap[BigInt, Set[(Int, Int)]])(f)
-		println(packed.filter(_._2.size > 1).toList.sortBy(_._1))
-		res.size
 	}
 
 	def solve0030: Number = (10 to 354294).filter(x => sumOf5thPowersOfDigits(x) == x).toList.sum
