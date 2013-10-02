@@ -440,7 +440,54 @@ class Problems {
 
 	def solve0030: Number = (10 to 354294).filter(x => sumOf5thPowersOfDigits(x) == x).toList.sum
 
+	def solve0042(filename: URI): Number = {
+		val words = Source.fromFile(filename).getLines().toList.map(_.split(",").map(_.replaceAll("\"", "")).toList).flatten
+		def calculateValue(s: String): Number = {
+			def calculateValue(s: String, acc: Number): Number = {
+				if (s.isEmpty) {
+					acc
+				} else {
+					calculateValue(s.substring(1), acc + s.charAt(0).toInt - 64)
+				}
+			}
+			calculateValue(s, 0)
+		}
+		val values = words.map(calculateValue)
+		def generateTriangleNumbers: Stream[Number] = {
+			def generateNext(n: Number): Stream[Number] = {
+				(n * (n + 1) / 2) #:: generateNext(n + 1)
+			}
+			generateNext(1)
+		}
+		val triangleNumbers = generateTriangleNumbers.takeWhile(_ <= values.max).toSet
+		values.count(triangleNumbers.contains)
+	}
+
 	def solve0048: Number = (BigInt(1) to 1000).map(x => x.modPow(x, BigInt("10000000000"))).sum % BigInt("10000000000")
+
+	def solve0050: Number = {
+		val limit = 1000000
+		def findLongestSequences(p: List[Number]): Map[Number, Number] = {
+			def findLongestSequences(l: Int, u: Int, p: List[Number], currSum: Number, m: Map[Number, Number]): Map[Number, Number] = {
+				if (l >= p.length) {
+					m
+				} else {
+					if (u >= p.length || currSum > limit) {
+						findLongestSequences(l + 1, l + 1, p, 0, m)
+					} else {
+						val currVal = currSum + p(u)
+						if (p.contains(currVal)) {
+							findLongestSequences(l, u + 1, p, currVal, m.updated(currVal, m.getOrElse(currVal, BigInt(0)).max(u - l + 1)))
+						} else {
+							findLongestSequences(l, u + 1, p, currVal, m)
+						}
+					}
+				}
+			}
+			findLongestSequences(0, 0, p, p(0), p.map((_, BigInt(0))).toMap)
+		}
+		findLongestSequences(primesWithMax(limit).toList).toList.sortWith((x, y) => x._2 > y._2)(0)._1
+	}
 
 	def solve0067(filename: URI): Number = solve0018(filename)
 

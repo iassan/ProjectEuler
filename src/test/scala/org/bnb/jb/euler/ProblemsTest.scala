@@ -2,6 +2,7 @@ package org.bnb.jb.euler
 
 import org.scalatest.junit.JUnitSuite
 import org.junit.{Ignore, Test}
+import org.bnb.jb.euler.common.Numbers
 
 /**
  * @author Jacek Bilski
@@ -264,11 +265,38 @@ class ProblemsTest extends JUnitSuite {
 
 	@Test
 	@Ignore
+	def testSolve0042() {
+		val problem = new Problems
+		val result = problem.solve0042(getClass.getResource("../../../../0042/words.txt").toURI)
+		println("Problem 0042: " + result)
+		assert(result == 162)
+	}
+
+	@Test
+	@Ignore
 	def testSolve0048() {
 		val problem = new Problems
 		val result = problem.solve0048
 		println("Problem 0048: " + result)
 		assert(result == BigInt("9110846700"))
+	}
+
+	@Test
+	@Ignore	// still sieve of atkin doesn't perform well
+	def testSolve0050() {
+		val p = Numbers.primesWithMax(1000000).toList
+		println(p)
+		val problem = new Problems
+		val result = problem.solve0050
+		println("Problem 0050: " + result)
+		assert(result == -1)
+	}
+
+	@Test
+	@Ignore
+	def testSieveOfAtkin() {
+		val p = Numbers.primes2WithMax(50000).toList
+		println(p)
 	}
 
 	@Test
