@@ -9,7 +9,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<scala.version>2.10.1</scala.version>
+		<scala.version>2.10.3</scala.version>
 		<scalatest.scala.version>2.10</scalatest.scala.version>
 		<scalatest.version>1.9.1</scalatest.version>
 	</properties>
@@ -31,7 +31,7 @@
 				<configuration>
 					<scalaVersion>${scala.version}</scalaVersion>
 					<args>
-						<arg>-target:jvm-1.5</arg>
+						<arg>-target:jvm-1.6</arg>
 					</args>
 				</configuration>
 			</plugin>

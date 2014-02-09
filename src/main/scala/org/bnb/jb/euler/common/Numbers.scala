@@ -5,8 +5,8 @@ import scala.collection.immutable.HashMap
 
 /**
  * @author Jacek Bilski
- * @version $Revision$
- *          $Id$
+ * @version $Revision: 174 $
+ *          $Id: Numbers.scala 174 2013-08-20 12:32:38Z jacek.bilski $
  */
 object Numbers {
 
@@ -18,7 +18,7 @@ object Numbers {
 			if (current > x) {
 				Stream.empty
 			} else {
-				if ((x % current) == 0) {
+				if ((x % current) == BigInt(0)) {
 					current #:: findRemainingDivisors(x, current + 1)
 				} else {
 					findRemainingDivisors(x, current + 1)
@@ -168,13 +168,13 @@ object Numbers {
 
 	def timesIn(n: Number, x: Number): Number = {
 		def timesIn(n: Number, x: Number, acc: Number): Number = {
-			if (n % x == 0) {
+			if (n % x == BigInt(0)) {
 				timesIn(n / x, x, acc + 1)
 			} else {
 				acc
 			}
 		}
-		if (x == 0 || x == 1) {
+		if (x == BigInt(0) || x == BigInt(1)) {
 			throw new IllegalArgumentException
 		}
 		timesIn(n, x, 0)
@@ -183,7 +183,7 @@ object Numbers {
 	def factorial(n: Number): Number = {
 		def f(n: Number, acc: Number): Number = {
 			if (n < 1) throw new IllegalArgumentException("Cannot calculate factorial for something less than 1")
-			if (n == 1) acc else f(n - 1, acc * n)
+			if (n == BigInt(1)) acc else f(n - 1, acc * n)
 		}
 		f(n, 1)
 	}
@@ -192,10 +192,10 @@ object Numbers {
 	def factorize(n: Number): Stream[(Number, Int)] = {
 		def factorize(x: Number, primes: Stream[Number], currCount: Int, res: Stream[(Number, Int)]): Stream[(Number, Int)] = {
 			//println("factorize(x: " + x + ", primes.head: " + primes.head + ", currCount: " + currCount + ")")
-			if (x == 1) {
+			if (x == BigInt(1)) {
 				(primes.head, currCount) #:: res
 			} else {
-				if (x % primes.head == 0) {
+				if (x % primes.head == BigInt(0)) {
 					factorize(x / primes.head, primes, currCount + 1, res)
 				} else {
 					factorize(x, primes.tail, 0, (primes.head, currCount) #:: res)
@@ -266,13 +266,13 @@ object Numbers {
 
 	def powerModulo(base: Number, exponent: Number, modulo: Number): Number = {
 		def powerModulo0(base: Number, exponent: Number, modulo: Number, acc: Number): Number = {
-			if (exponent == 1) {
+			if (exponent == BigInt(1)) {
 				acc
 			} else {
 				powerModulo0(base, exponent - 1, modulo, (acc * base) % modulo)
 			}
 		}
-		if (exponent == 0) {
+		if (exponent == BigInt(0)) {
 			1
 		} else {
 			powerModulo0(base, exponent, modulo, base)

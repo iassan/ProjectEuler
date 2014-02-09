@@ -8,8 +8,6 @@ import scala.collection.immutable.{HashMap, HashSet}
 
 /**
  * @author Jacek Bilski
- * @version $Revision$
- *          $Id$
  */
 class Problems {
 
@@ -33,7 +31,7 @@ class Problems {
 				if (p.isEmpty) {
 					if (n > currMax) n else currMax
 				} else {
-					if (n % p.head == 0) {
+					if (n % p.head == BigInt(0)) {
 						divide(n / p.head, p, p.head)
 					}
 					else {
@@ -182,7 +180,7 @@ class Problems {
 		// rozłożyć na czynniki pierwsze i policzyć liczbę kombinacji tychże
 		def countDivisorsOfTriangleOf(n: Number, cod: Map[Number, Number]): Number = {
 			def countDivisorsOf(n: Number): Number = factorize(n).foldLeft(BigInt(1))((b, x) => b * (x._2 + 1))
-			if (n % 2 == 0) {
+			if (n % 2 == BigInt(0)) {
 				val cod1 = if (cod.contains(n / 2)) cod else cod.updated(n / 2, countDivisorsOf(n / 2))
 				val cod2 = if (cod1.contains(n + 1)) cod1 else cod1.updated(n + 1, countDivisorsOf(n + 1))
 				if (cod2.getOrElse(n / 2, BigInt(1)) * cod2.getOrElse(n + 1, BigInt(1)) > requiredCount) {
@@ -213,10 +211,10 @@ class Problems {
 	def solve0014: Number = {
 		def sequenceLength(n: Number): Number = {
 			def sequenceLength0(n: Number, currLength: Number): Number = {
-				if (n == 1) {
+				if (n == BigInt(1)) {
 					currLength
 				} else {
-					if (n % 2 == 0) {
+					if (n % 2 == BigInt(0)) {
 						sequenceLength0(n / 2, currLength + 1)
 					} else {
 						sequenceLength0(3 * n + 1, currLength + 1)
@@ -409,7 +407,7 @@ class Problems {
 				(for {
 					y <- x to limit
 					if w.pow(y.intValue()) <= limit
-					if (b * x % y) == 0
+					if (b * x % y) == BigInt(0)
 				} yield {
 					(w.pow(y.intValue()), b * x / y)
 				}).toSet
@@ -438,7 +436,7 @@ class Problems {
 		s(2, 2, 0, new HashMap[Number, Set[Number]])
 	}
 
-	def solve0030: Number = (10 to 354294).filter(x => sumOf5thPowersOfDigits(x) == x).toList.sum
+	def solve0030: Number = (BigInt(10) to 354294).filter(x => sumOf5thPowersOfDigits(x) == x).toList.sum
 
 	def solve0042(filename: URI): Number = {
 		val words = Source.fromFile(filename).getLines().toList.map(_.split(",").map(_.replaceAll("\"", "")).toList).flatten

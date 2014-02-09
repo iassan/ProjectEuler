@@ -6,8 +6,8 @@ import org.bnb.jb.euler.common.Numbers
 
 /**
  * @author Jacek Bilski
- * @version $Revision$
- *          $Id$
+ * @version $Revision: 175 $
+ *          $Id: ProblemsTest.scala 175 2013-10-02 20:38:29Z jacek.bilski $
  */
 class ProblemsTest extends JUnitSuite {
 
@@ -17,7 +17,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0001
 		println("Problem 0001: " + result)
-		assert(result == 233168)
+		assert(result == BigInt(233168))
 	}
 
 	@Test
@@ -26,7 +26,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0002
 		println("Problem 0002: " + result)
-		assert(result == 4613732)
+		assert(result == BigInt(4613732))
 	}
 
 	@Test
@@ -35,7 +35,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0003
 		println("Problem 0003: " + result)
-		assert(result == 6857)
+		assert(result == BigInt(6857))
 	}
 
 	@Test
@@ -44,7 +44,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0004
 		println("Problem 0004: " + result)
-		assert(result == 232792560)
+		assert(result == BigInt(232792560))
 	}
 
 	@Test
@@ -53,7 +53,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0005
 		println("Problem 0005: " + result)
-		assert(result == 232792560)
+		assert(result == BigInt(232792560))
 	}
 
 	@Test
@@ -62,7 +62,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0006
 		println("Problem 0006: " + result)
-		assert(result == 25164150)
+		assert(result == BigInt(25164150))
 	}
 
 	@Test
@@ -71,7 +71,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0007
 		println("Problem 0007: " + result)
-		assert(result == 104743)
+		assert(result == BigInt(104743))
 	}
 
 	@Test
@@ -89,7 +89,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0009
 		println("Problem 0009: " + result)
-		assert(result == 31875000)
+		assert(result == BigInt(31875000))
 	}
 
 	@Test
@@ -107,7 +107,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0011(getClass.getResource("../../../../0011/grid.txt").toURI)
 		println("Problem 0011: " + result)
-		assert(result == 70600674)
+		assert(result == BigInt(70600674))
 	}
 
 	@Test
@@ -116,7 +116,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0012
 		println("Problem 0012: " + result)
-		assert(result == 76576500)
+		assert(result == BigInt(76576500))
 	}
 
 	@Test
@@ -134,7 +134,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0014
 		println("Problem 0014: " + result)
-		assert(result == 837799)
+		assert(result == BigInt(837799))
 	}
 
 	@Test
@@ -152,7 +152,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0016
 		println("Problem 0016: " + result)
-		assert(result == 1366)
+		assert(result == BigInt(1366))
 	}
 
 	@Test
@@ -161,7 +161,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0017
 		println("Problem 0017: " + result)
-		assert(result == 21124)
+		assert(result == BigInt(21124))
 	}
 
 	@Test
@@ -170,7 +170,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0018(getClass.getResource("../../../../0018/triangle.txt").toURI)
 		println("Problem 0018: " + result)
-		assert(result == 1074)
+		assert(result == BigInt(1074))
 	}
 
 	@Test
@@ -179,7 +179,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0019
 		println("Problem 0019: " + result)
-		assert(result == 171)
+		assert(result == BigInt(171))
 	}
 
 	@Test
@@ -188,7 +188,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0020
 		println("Problem 0020: " + result)
-		assert(result == 648)
+		assert(result == BigInt(648))
 	}
 
 	@Test
@@ -197,7 +197,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0021
 		println("Problem 0021: " + result)
-		assert(result == 31626)
+		assert(result == BigInt(31626))
 	}
 
 	@Test
@@ -206,7 +206,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0022(getClass.getResource("../../../../0022/names.txt").toURI)
 		println("Problem 0022: " + result)
-		assert(result == 871198282)
+		assert(result == BigInt(871198282))
 	}
 
 	@Test
@@ -215,7 +215,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0023
 		println("Problem 0023: " + result)
-		assert(result == 4179871)
+		assert(result == BigInt(4179871))
 	}
 
 	@Test
@@ -233,7 +233,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0025
 		println("Problem 0025: " + result)
-		assert(result == 4782)
+		assert(result == BigInt(4782))
 	}
 
 	@Test
@@ -242,7 +242,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0028
 		println("Problem 0028: " + result)
-		assert(result == 669171001)
+		assert(result == BigInt(669171001))
 	}
 
 	@Test
@@ -251,7 +251,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0029
 		println("Problem 0029: " + result)
-		assert(result == 9183)
+		assert(result == BigInt(9183))
 	}
 
 	@Test
@@ -260,7 +260,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0030
 		println("Problem 0030: " + result)
-		assert(result == 443839)
+		assert(result == BigInt(443839))
 	}
 
 	@Test
@@ -269,7 +269,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0042(getClass.getResource("../../../../0042/words.txt").toURI)
 		println("Problem 0042: " + result)
-		assert(result == 162)
+		assert(result == BigInt(162))
 	}
 
 	@Test
@@ -305,7 +305,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0067(getClass.getResource("../../../../0067/triangle.txt").toURI)
 		println("Problem 0067: " + result)
-		assert(result == 7273)
+		assert(result == BigInt(7273))
 	}
 
 	@Test
@@ -314,6 +314,6 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0107(getClass.getResource("../../../../0107/network.txt").toURI)
 		println("Problem 0107: " + result)
-		assert(result == 259679)
+		assert(result == BigInt(259679))
 	}
 }
