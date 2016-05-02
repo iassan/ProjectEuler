@@ -1,13 +1,8 @@
 package org.bnb.jb.euler.common
 
-import math._
 import scala.collection.immutable.HashMap
+import scala.math._
 
-/**
- * @author Jacek Bilski
- * @version $Revision: 174 $
- *          $Id: Numbers.scala 174 2013-08-20 12:32:38Z jacek.bilski $
- */
 object Numbers {
 
 	type Number = BigInt
@@ -283,5 +278,5 @@ object Numbers {
 		(1 to 100).map(x => (n / BigInt(10).pow(x - 1)) % 10).map(x => x.pow(5)).sum
 	}
 
-	def multiGcd(numbers: Stream[Number]): Number = numbers.foldRight(numbers(0))((x, b) => x.gcd(b))
+	def multiGcd(numbers: Stream[Number]): Number = numbers.foldRight(numbers.head)((x, b) => x.gcd(b))
 }

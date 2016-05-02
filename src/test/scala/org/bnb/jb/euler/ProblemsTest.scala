@@ -1,14 +1,9 @@
 package org.bnb.jb.euler
 
-import org.scalatest.junit.JUnitSuite
-import org.junit.{Ignore, Test}
 import org.bnb.jb.euler.common.Numbers
+import org.junit.{Ignore, Test}
+import org.scalatest.junit.JUnitSuite
 
-/**
- * @author Jacek Bilski
- * @version $Revision: 175 $
- *          $Id: ProblemsTest.scala 175 2013-10-02 20:38:29Z jacek.bilski $
- */
 class ProblemsTest extends JUnitSuite {
 
 	@Test
@@ -44,7 +39,7 @@ class ProblemsTest extends JUnitSuite {
 		val problem = new Problems
 		val result = problem.solve0004
 		println("Problem 0004: " + result)
-		assert(result == BigInt(232792560))
+		assert(result == BigInt(906609))
 	}
 
 	@Test
@@ -285,7 +280,7 @@ class ProblemsTest extends JUnitSuite {
 	@Ignore	// still sieve of atkin doesn't perform well
 	def testSolve0050() {
 		val p = Numbers.primesWithMax(1000000).toList
-		println(p)
+//		println(p)
 		val problem = new Problems
 		val result = problem.solve0050
 		println("Problem 0050: " + result)

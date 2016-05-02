@@ -9,9 +9,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<scala.version>2.10.3</scala.version>
-		<scalatest.scala.version>2.10</scalatest.scala.version>
-		<scalatest.version>1.9.1</scalatest.version>
+		<scala.major.version>2.11</scala.major.version>
+		<scala.version>${scala.major.version}.7</scala.version>
+		<scalatest.version>2.2.6</scalatest.version>
 	</properties>
 
 	<build>
@@ -52,12 +52,12 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.scalatest</groupId>
-			<artifactId>scalatest_${scalatest.scala.version}</artifactId>
+			<artifactId>scalatest_${scala.major.version}</artifactId>
 			<version>${scalatest.version}</version>
 			<scope>test</scope>
 		</dependency>

@@ -1,14 +1,13 @@
 package org.bnb.jb.euler
 
-import org.bnb.jb.euler.common.Numbers._
-import scala.io.Source
 import java.net.URI
 import java.util.Date
-import scala.collection.immutable.{HashMap, HashSet}
 
-/**
- * @author Jacek Bilski
- */
+import org.bnb.jb.euler.common.Numbers._
+
+import scala.collection.immutable.{HashMap, HashSet}
+import scala.io.Source
+
 class Problems {
 
 	def solve0001: Number = {
@@ -71,7 +70,7 @@ class Problems {
 
 	def solve0007: Number = {
 		val p = new Array[Boolean](110000)
-		for (i <- 0 until p.length) {
+		for (i <- p.indices) {
 			p(i) = true
 		}
 		p(0) = false
@@ -84,8 +83,8 @@ class Problems {
 			}
 		}
 		val primes = p.zipWithIndex.filter(_._1)
-		println(primes)
-		println(primes.length)
+//		println(primes)
+//		println(primes.length)
 		primes(10000)._2 // 10000 bo liczymy od zera
 	}
 
@@ -113,12 +112,12 @@ class Problems {
 		} yield {
 			a * b * c
 		}
-		res(0)
+		res.head
 	}
 
 	def solve0010: Number = {
 		val p = new Array[Boolean](2000000)
-		for (i <- 0 until p.length) {
+		for (i <- p.indices) {
 			p(i) = true
 		}
 		p(0) = false
@@ -242,11 +241,11 @@ class Problems {
 		def findMax(a: List[Number], p: List[List[Number]]): Number = {
 			// a is longer than b and already contains max sum of tree below
 			if (p.isEmpty) {
-				a(0)
+				a.head
 			}
 			else {
 				val newA = for {
-					j <- 0 until p.head.length
+					j <- p.head.indices
 				} yield {
 					p.head(j) + a(j).max(a(j + 1))
 				}
@@ -256,7 +255,7 @@ class Problems {
 		val start = new Date()
 		val res = findMax(problem.head, problem.tail)
 		val end = new Date()
-		println("runtime (pure): " + (end.getTime - start.getTime) + " ms")
+//		println("runtime (pure): " + (end.getTime - start.getTime) + " ms")
 		res
 	}
 
@@ -337,15 +336,15 @@ class Problems {
 			}
 			findSumsOfDivisors(2, 4, new HashMap[Number, Number])
 		}
-		val abundantNumbers = findSumsOfDivisors.filter(x => x._2 > x._1).map(_._1).toSet
-		val numbersThatAreSumsOfTwoAbundantNumbers = (for {
+		val abundantNumbers = findSumsOfDivisors.filter(x => x._2 > x._1).keySet
+		val numbersThatAreSumsOfTwoAbundantNumbers = for {
 			i <- abundantNumbers
 			j <- abundantNumbers
 			if j >= i
 			if i + j <= limit
 		} yield {
 			i + j
-		}).toSet
+		}
 		val sumOfThoseNumbers = numbersThatAreSumsOfTwoAbundantNumbers.sum
 		(1 to limit).sum - sumOfThoseNumbers
 	}
@@ -375,7 +374,7 @@ class Problems {
 		generateNthPermutation(digits, permutationNumber - 1).foldLeft(BigInt(0))(10 * _ + _)
 	}
 
-	def solve0025: Number = fibonacci.takeWhile(_.toString().length <= 1000).zipWithIndex.filter(_._1.toString().length == 1000)(0)._2 + 1
+	def solve0025: Number = fibonacci.takeWhile(_.toString().length <= 1000).zipWithIndex.filter(_._1.toString().length == 1000).head._2 + 1
 
 	def solve0028: Number = {
 		val size = 1001
@@ -396,7 +395,7 @@ class Problems {
 				// In general (w^x)^b = (w^y)^(b*(x/y)) if b*(x/y) is integer
 				def findWandX(aFactors: Stream[(Number, Int)]): (Number, Number) = {
 					if (aFactors.size == 1)
-						(aFactors(0)._1, BigInt(aFactors(0)._2))
+						(aFactors.head._1, BigInt(aFactors.head._2))
 					else {
 						val gcd = multiGcd(aFactors.map(x => BigInt(x._2)))
 						(aFactors.map(x => x._1.pow((x._2/gcd).intValue())).foldRight(BigInt(1))(_*_), gcd)
@@ -439,7 +438,7 @@ class Problems {
 	def solve0030: Number = (BigInt(10) to 354294).filter(x => sumOf5thPowersOfDigits(x) == x).toList.sum
 
 	def solve0042(filename: URI): Number = {
-		val words = Source.fromFile(filename).getLines().toList.map(_.split(",").map(_.replaceAll("\"", "")).toList).flatten
+		val words = Source.fromFile(filename).getLines().toList.flatMap(_.split(",").map(_.replaceAll("\"", "")).toList)
 		def calculateValue(s: String): Number = {
 			def calculateValue(s: String, acc: Number): Number = {
 				if (s.isEmpty) {
@@ -482,9 +481,9 @@ class Problems {
 					}
 				}
 			}
-			findLongestSequences(0, 0, p, p(0), p.map((_, BigInt(0))).toMap)
+			findLongestSequences(0, 0, p, p.head, p.map((_, BigInt(0))).toMap)
 		}
-		findLongestSequences(primesWithMax(limit).toList).toList.sortWith((x, y) => x._2 > y._2)(0)._1
+		findLongestSequences(primesWithMax(limit).toList).toList.sortWith((x, y) => x._2 > y._2).head._1
 	}
 
 	def solve0067(filename: URI): Number = solve0018(filename)
@@ -492,8 +491,8 @@ class Problems {
 	def solve0107(filename: URI): Number = {
 		val s = Source.fromFile(filename).getLines().toList.map(_.split(",").toList)
 		val vertices = (for {
-			i <- 0 until s.length
-			j <- 0 until s(i).length
+			i <- s.indices
+			j <- s(i).indices
 			if j > i
 			if s(i)(j) != "-"
 		} yield {
@@ -501,7 +500,7 @@ class Problems {
 		}).sortBy(_._3).toList
 		val start = new Date()
 		val sum = vertices.map(_._3).sum
-		val subGraphs = (0 until s.length).map(x => (x, x)).toMap[Int, Int] // identyfikator grupy -> lista wierzchołków w grupie
+		val subGraphs = s.indices.map(x => (x, x)).toMap[Int, Int] // identyfikator grupy -> lista wierzchołków w grupie
 		def findMinimalSpanningTree(vertices: List[(Int, Int, Number)], subGraphs: Map[Int, Int]): List[(Int, Int, Number)] = {
 			def findMinimalSpanningTree0(vertices: List[(Int, Int, Number)], subGraphs: Map[Int, Int], curr: List[(Int, Int, Number)]): List[(Int, Int, Number)] = {
 				//				println("Iteartion")
@@ -528,7 +527,7 @@ class Problems {
 		val minSum = findMinimalSpanningTree(vertices, subGraphs).map(_._3).sum
 		val res = sum - minSum
 		val end = new Date()
-		println("Running time: " + (end.getTime - start.getTime))
+//		println("Running time: " + (end.getTime - start.getTime))
 		res
 	}
 }
